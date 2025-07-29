@@ -408,9 +408,9 @@ export function TeamWorkflow() {
         </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-6 w-full">
         {workflows.map((workflow) => (
-          <Card key={workflow.id}>
+          <Card key={workflow.id} className="w-full">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
@@ -430,11 +430,11 @@ export function TeamWorkflow() {
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
+            <CardContent className="w-full">
+              <div className="space-y-4 w-full">
                 {workflow.steps.map((step, index) => (
-                  <div key={step.id} className="flex items-center gap-4">
-                    <div className="flex items-center gap-3">
+                  <div key={step.id} className="flex items-center gap-4 w-full">
+                    <div className="flex items-center gap-3 flex-1">
                       <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                         <span className="text-blue-600 font-semibold text-sm">{step.order}</span>
                       </div>
@@ -443,7 +443,7 @@ export function TeamWorkflow() {
                         <p className="text-sm text-gray-600">{step.description}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 flex-shrink-0">
                       <div className="flex items-center gap-2">
                         <User className="w-4 h-4 text-gray-400" />
                         <span className="text-sm">{step.assignee}</span>

@@ -345,7 +345,7 @@ export function MeetingNotes() {
         </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-6 w-full">
         {meetingNotes.map((meeting) => (
           <Card key={meeting.id}>
             <CardHeader>
