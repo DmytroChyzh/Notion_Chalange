@@ -207,14 +207,14 @@ export function GettingStarted() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
         {/* Getting Started Steps */}
-        <div>
+        <div className="w-full">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
             <Play className="w-5 h-5" />
             Setup Steps
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-4 w-full">
             {steps.map((step) => (
               <Card key={step.id} className={`transition-all duration-200 ${completedSteps.includes(step.id) ? 'border-green-200 bg-green-50' : ''}`}>
                 <CardContent className="p-4">
@@ -257,12 +257,12 @@ export function GettingStarted() {
         </div>
 
         {/* Features Overview */}
-        <div>
+        <div className="w-full">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
             <Star className="w-5 h-5" />
             Key Features
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-4 w-full">
             {features.map((feature, index) => (
               <Card key={index}>
                 <CardContent className="p-4">
@@ -281,12 +281,12 @@ export function GettingStarted() {
           </div>
 
           {/* Quick Actions */}
-          <div className="mt-8">
+          <div className="mt-8 w-full">
             <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <Zap className="w-5 h-5" />
               Quick Actions
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
               {quickActions.map((action, index) => (
                 <Button
                   key={index}
@@ -307,8 +307,8 @@ export function GettingStarted() {
       </div>
 
       {/* Tips Section */}
-      <div className="mt-8">
-        <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+      <div className="mt-8 w-full">
+        <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200 w-full">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-blue-900">
               <TrendingUp className="w-5 h-5" />

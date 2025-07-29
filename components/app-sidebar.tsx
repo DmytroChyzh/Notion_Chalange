@@ -32,7 +32,7 @@ export function AppSidebar({ onViewChange, currentView }: AppSidebarProps) {
   ])
 
   return (
-    <Sidebar className="border-r border-gray-200">
+    <Sidebar className="border-r border-gray-200 fixed top-12 left-0 bottom-0 z-10">
       <SidebarHeader className="p-4">
         <div className="flex items-center gap-2 mb-4">
           <div className="w-6 h-6 bg-black rounded-sm flex items-center justify-center">

@@ -65,11 +65,11 @@ export default function NotionAI() {
       <div className="flex h-screen bg-white">
         <AppSidebar onViewChange={setCurrentView} currentView={currentView} />
 
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col pt-12 pl-64">
           <TopNavigation onChatToggle={() => setIsChatOpen(!isChatOpen)} />
 
           <div className="flex-1 flex overflow-hidden">
-                            <main className={`flex-1 overflow-auto transition-all duration-300 ${isChatOpen ? "mr-[420px]" : "mr-0"} w-full`}>
+            <main className={`flex-1 overflow-auto transition-all duration-300 ${isChatOpen ? "mr-[420px]" : "mr-0"} w-full`}>
               {renderMainContent()}
             </main>
 
