@@ -175,7 +175,7 @@ export function GettingStarted() {
   return (
     <div className="p-8 w-full max-w-none">
       <div className="mb-8">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 w-full">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Getting Started</h1>
             <p className="text-gray-600">Welcome to your AI-powered workspace! Let's get you set up.</p>

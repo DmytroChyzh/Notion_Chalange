@@ -235,7 +235,7 @@ export function ProjectRoadmap() {
 
   return (
     <div className="p-8 w-full max-w-none">
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex items-center justify-between w-full">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Project Roadmap</h1>
           <p className="text-gray-600">AI-generated project tracking table with smart columns and data</p>

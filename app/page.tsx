@@ -69,7 +69,7 @@ export default function NotionAI() {
           <TopNavigation onChatToggle={() => setIsChatOpen(!isChatOpen)} />
 
           <div className="flex-1 flex overflow-hidden">
-                            <main className={`flex-1 overflow-auto transition-all duration-300 ${isChatOpen ? "mr-[420px]" : "mr-0"}`}>
+                            <main className={`flex-1 overflow-auto transition-all duration-300 ${isChatOpen ? "mr-[420px]" : "mr-0"} w-full`}>
               {renderMainContent()}
             </main>
 

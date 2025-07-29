@@ -128,7 +128,7 @@ export function AIWorkflowBuilder() {
 
   return (
     <div className="p-8 w-full max-w-none">
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex items-center justify-between w-full">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Product Development Workflow</h1>
           <p className="text-gray-600">AI-generated process flow with automated task management</p>

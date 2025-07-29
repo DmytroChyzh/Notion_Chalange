@@ -128,7 +128,7 @@ export function AITableGenerator() {
         <p className="text-gray-600">AI-generated project tracking table with smart columns and data</p>
       </div>
 
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 w-full">
         <div className="flex items-center gap-3">
           <Button variant="outline" size="sm" className="gap-2 bg-transparent">
             <Filter className="w-4 h-4" />

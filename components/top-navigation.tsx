@@ -11,7 +11,7 @@ interface TopNavigationProps {
 
 export function TopNavigation({ onChatToggle }: TopNavigationProps) {
   return (
-    <header className="h-12 border-b border-gray-200 flex items-center justify-between px-4 bg-white">
+    <header className="h-12 border-b border-gray-200 flex items-center justify-between px-4 bg-white w-full">
       <div className="flex items-center gap-4 flex-1">
         <div className="relative max-w-md flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />

@@ -239,7 +239,7 @@ export function AIDashboard({ onViewChange }: AIDashboardProps) {
         </div>
       )}
 
-      <div className="mb-8">
+      <div className="mb-8 w-full">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Good morning! 👋</h1>
         <p className="text-gray-600">What would you like to create with AI today?</p>
       </div>
