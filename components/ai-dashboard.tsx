@@ -1,302 +1,383 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { FileText, Table, Workflow, Sparkles, Clock, Calendar } from "lucide-react"
-import type { ViewType } from "@/app/page"
-import { useState } from "react"
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/hooks/use-toast';
+import { useAI } from '@/hooks/use-ai';
+import { LoadingSpinner } from '@/components/loading-spinner';
+import { 
+  FileText, 
+  Workflow, 
+  BarChart3, 
+  MessageSquare, 
+  Plus, 
+  Send, 
+  Sparkles,
+  Zap,
+  Clock,
+  CheckCircle,
+  ArrowRight
+} from 'lucide-react';
 
-interface AIDashboardProps {
-  onViewChange: (view: ViewType) => void
+interface DashboardProps {
+  onNavigate: (section: string) => void;
 }
 
-export function AIDashboard({ onViewChange }: AIDashboardProps) {
-  const [isGeneratingTable, setIsGeneratingTable] = useState(false)
-  const [isGeneratingWorkflow, setIsGeneratingWorkflow] = useState(false)
-  const [showGeneratedTable, setShowGeneratedTable] = useState(false)
-  const [showGeneratedWorkflow, setShowGeneratedWorkflow] = useState(false)
-  const [showChart, setShowChart] = useState(false)
-  const [showSummary, setShowSummary] = useState(false)
-  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false)
+export function AIDashboard({ onNavigate }: DashboardProps) {
+  const [activeTab, setActiveTab] = useState('overview');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [currentAction, setCurrentAction] = useState<string | null>(null);
+  const [inputValue, setInputValue] = useState('');
+  const [generatedContent, setGeneratedContent] = useState<any>(null);
+  
+  const { toast } = useToast();
+  const { generateContent, isLoading, error, response } = useAI();
 
-  const handleCreateTable = () => {
-    setIsGeneratingTable(true)
-    setTimeout(() => {
-      setIsGeneratingTable(false)
-      setShowGeneratedTable(true)
-    }, 2000)
-  }
+  const handleAction = async (action: string) => {
+    setCurrentAction(action);
+    setIsDialogOpen(true);
+  };
 
-  const handleCreateWorkflow = () => {
-    setIsGeneratingWorkflow(true)
-    setTimeout(() => {
-      setIsGeneratingWorkflow(false)
-      setShowGeneratedWorkflow(true)
-    }, 2000)
-  }
+  const handleGenerate = async () => {
+    if (!inputValue.trim()) {
+      toast({
+        title: "Input required",
+        description: "Please enter some text to generate content.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-  const handleVisualizeData = () => {
-    setShowChart(true)
-  }
+    try {
+      let type: 'text' | 'table' | 'workflow' | 'visualization' = 'text';
+      
+      switch (currentAction) {
+        case 'workflow':
+          type = 'workflow';
+          break;
+        case 'table':
+          type = 'table';
+          break;
+        case 'visualization':
+          type = 'visualization';
+          break;
+        default:
+          type = 'text';
+      }
 
-  const handleSummarizePage = () => {
-    setIsGeneratingSummary(true)
-    setTimeout(() => {
-      setIsGeneratingSummary(false)
-      setShowSummary(true)
-    }, 1500)
-  }
+      const result = await generateContent(inputValue, type);
+      setGeneratedContent(result);
+      
+      toast({
+        title: "Success!",
+        description: "Content generated successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to generate content. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
-  const quickActions = [
-    {
-      title: "Generate New Page",
-      description: "Create a structured page with AI assistance",
-      icon: FileText,
-      action: () => onViewChange("page"),
-      color: "bg-blue-50 hover:bg-blue-100 border-blue-200",
-    },
-    {
-      title: "Create Table with AI",
-      description: "Build smart databases and track projects",
-      icon: Table,
-      action: handleCreateTable,
-      color: "bg-green-50 hover:bg-green-100 border-green-200",
-      loading: isGeneratingTable,
-    },
-    {
-      title: "Plan Workflow",
-      description: "Design process flows with AI guidance",
-      icon: Workflow,
-      action: handleCreateWorkflow,
-      color: "bg-purple-50 hover:bg-purple-100 border-purple-200",
-      loading: isGeneratingWorkflow,
-    },
-  ]
+  const renderGeneratedContent = () => {
+    if (!generatedContent) return null;
 
-  const recentPages = [
-    { name: "Q1 Planning", type: "Page", updated: "2 hours ago", icon: FileText },
-    { name: "Product Roadmap", type: "Database", updated: "1 day ago", icon: Table },
-    { name: "Team Onboarding", type: "Workflow", updated: "3 days ago", icon: Workflow },
-    { name: "Content Calendar", type: "Database", updated: "1 week ago", icon: Calendar },
-  ]
-
-  return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <div className="mb-6 flex justify-end">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleSummarizePage}
-          disabled={isGeneratingSummary}
-          className="gap-2 bg-white border-gray-200 hover:bg-gray-50"
-        >
-          {isGeneratingSummary ? (
-            <>
-              <div className="flex gap-1">
-                <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
-                <div
-                  className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.1s" }}
-                ></div>
-                <div
-                  className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"
-                  style={{ animationDelay: "0.2s" }}
-                ></div>
+    try {
+      const content = JSON.parse(generatedContent.content);
+      
+      switch (currentAction) {
+        case 'workflow':
+          return (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Generated Workflow</h3>
+              <div className="space-y-3">
+                {content.map((step: any, index: number) => (
+                  <Card key={step.id || index} className="border-l-4 border-l-blue-500">
+                    <CardContent className="p-4">
+                      <div className="flex items-start space-x-3">
+                        <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full">
+                          <span className="text-blue-600 font-semibold text-sm">{step.order || index + 1}</span>
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold">{step.title}</h4>
+                          <p className="text-sm text-muted-foreground mt-1">{step.description}</p>
+                          {step.estimatedTime && (
+                            <div className="flex items-center space-x-2 mt-2">
+                              <Clock className="w-4 h-4 text-gray-400" />
+                              <span className="text-xs text-gray-500">{step.estimatedTime}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
-              <span>Summarizing...</span>
-            </>
-          ) : (
-            <>
-              <Sparkles className="w-4 h-4" />
-              Summarize page with AI
-            </>
-          )}
-        </Button>
-      </div>
+            </div>
+          );
 
-      {/* AI Summary Block */}
-      {showSummary && (
-        <div className="mb-8 animate-fade-in">
-          <p className="text-sm text-gray-500 mb-2">Here's what I created based on your request...</p>
-          <Card className="border border-gray-200 shadow-sm bg-blue-50 border-blue-200">
-            <CardContent className="p-4">
-              <div className="flex items-start gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <Sparkles className="w-4 h-4 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-2">📝 AI Page Summary</h3>
-                  <p className="text-gray-700 text-sm leading-relaxed">
-                    This page contains key tasks and a launch workflow. Next step: finalize copy and assign reviewers.
-                    The current progress shows 1 completed task, 1 in progress, and 1 pending review.
-                  </p>
-                </div>
+        case 'table':
+          return (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">{content.title || 'Generated Table'}</h3>
+              <div className="border rounded-lg overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      {content.headers?.map((header: string, index: number) => (
+                        <th key={index} className="px-4 py-3 text-left text-sm font-medium text-gray-700">
+                          {header}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {content.rows?.map((row: string[], rowIndex: number) => (
+                      <tr key={rowIndex} className="border-t">
+                        {row.map((cell: string, cellIndex: number) => (
+                          <td key={cellIndex} className="px-4 py-3 text-sm text-gray-900">
+                            {cell}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            </CardContent>
+            </div>
+          );
+
+        case 'visualization':
+          return (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">{content.config?.title || 'Generated Visualization'}</h3>
+              <Card className="p-6">
+                <div className="text-center space-y-4">
+                  <BarChart3 className="w-16 h-16 mx-auto text-blue-500" />
+                  <div>
+                    <h4 className="font-semibold">Chart Type: {content.config?.type || content.type}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Data points: {content.data?.datasets?.[0]?.data?.length || 'N/A'}
+                    </p>
+                  </div>
+                  <Badge variant="secondary">
+                    <Sparkles className="w-3 h-3 mr-1" />
+                    AI Generated
+                  </Badge>
+                </div>
+              </Card>
+            </div>
+          );
+
+        default:
+          return (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Generated Content</h3>
+              <Card className="p-4">
+                <div className="prose prose-sm max-w-none">
+                  <p className="whitespace-pre-wrap">{generatedContent.content}</p>
+                </div>
+              </Card>
+            </div>
+          );
+      }
+    } catch (error) {
+      return (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">Generated Content</h3>
+          <Card className="p-4">
+            <div className="prose prose-sm max-w-none">
+              <p className="whitespace-pre-wrap">{generatedContent.content}</p>
+            </div>
           </Card>
         </div>
-      )}
+      );
+    }
+  };
 
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Good morning! 👋</h1>
-        <p className="text-gray-600">What would you like to create with AI today?</p>
+  const actionCards = [
+    {
+      title: 'Create Page',
+      description: 'Generate new content with AI assistance',
+      icon: FileText,
+      action: 'page',
+      color: 'bg-blue-500',
+      gradient: 'from-blue-500 to-blue-600',
+    },
+    {
+      title: 'Plan Workflow',
+      description: 'Create detailed project workflows',
+      icon: Workflow,
+      action: 'workflow',
+      color: 'bg-green-500',
+      gradient: 'from-green-500 to-green-600',
+    },
+    {
+      title: 'Generate Table',
+      description: 'Create organized data tables',
+      icon: BarChart3,
+      action: 'table',
+      color: 'bg-purple-500',
+      gradient: 'from-purple-500 to-purple-600',
+    },
+    {
+      title: 'AI Query',
+      description: 'Ask questions and get AI responses',
+      icon: MessageSquare,
+      action: 'query',
+      color: 'bg-orange-500',
+      gradient: 'from-orange-500 to-orange-600',
+    },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">AI Dashboard</h1>
+          <p className="text-muted-foreground">
+            Your intelligent workspace powered by GPT-4
+          </p>
+        </div>
+        <Badge variant="secondary" className="flex items-center space-x-1">
+          <Zap className="w-3 h-3" />
+          <span>AI Powered</span>
+        </Badge>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        {quickActions.map((action, index) => (
-          <Card
-            key={index}
-            className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${action.color} ${action.loading ? "opacity-75" : ""}`}
-            onClick={action.loading ? undefined : action.action}
+      {/* Main Actions Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {actionCards.map((card) => (
+          <Card 
+            key={card.action}
+            className="group cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 border-2 hover:border-primary/50"
+            onClick={() => handleAction(card.action)}
           >
-            <CardHeader className="pb-3">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-white rounded-lg shadow-sm">
-                  <action.icon className="w-5 h-5 text-gray-700" />
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-4">
+                <div className={`p-3 rounded-lg ${card.color} text-white`}>
+                  <card.icon className="w-6 h-6" />
                 </div>
-                <div>
-                  <CardTitle className="text-lg text-gray-900">{action.title}</CardTitle>
+                <div className="flex-1">
+                  <h3 className="font-semibold group-hover:text-primary transition-colors">
+                    {card.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {card.description}
+                  </p>
                 </div>
+                <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
               </div>
-            </CardHeader>
-            <CardContent>
-              {action.loading ? (
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"></div>
-                    <div
-                      className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"
-                      style={{ animationDelay: "0.1s" }}
-                    ></div>
-                    <div
-                      className="w-2 h-2 bg-blue-600 rounded-full animate-bounce"
-                      style={{ animationDelay: "0.2s" }}
-                    ></div>
-                  </div>
-                  <span className="text-sm text-gray-600">AI is creating...</span>
-                </div>
-              ) : (
-                <CardDescription className="text-gray-600">{action.description}</CardDescription>
-              )}
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {/* Generated Table */}
-      {showGeneratedTable && (
-        <div className="mt-8 animate-fade-in">
-          <p className="text-sm text-gray-500 mb-3">Here's what I created based on your request...</p>
-          <GeneratedTable />
-        </div>
-      )}
+      {/* AI Generation Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2">
+              <Sparkles className="w-5 h-5 text-blue-500" />
+              <span>
+                {currentAction === 'workflow' && 'Plan Workflow'}
+                {currentAction === 'table' && 'Generate Table'}
+                {currentAction === 'query' && 'AI Query'}
+                {currentAction === 'page' && 'Create Page'}
+              </span>
+            </DialogTitle>
+            <DialogDescription>
+              {currentAction === 'workflow' && 'Describe the workflow you want to create'}
+              {currentAction === 'table' && 'Describe the table structure and data you need'}
+              {currentAction === 'query' && 'Ask any question to our AI assistant'}
+              {currentAction === 'page' && 'Describe the content you want to create'}
+            </DialogDescription>
+          </DialogHeader>
 
-      {/* Generated Workflow */}
-      {showGeneratedWorkflow && (
-        <div className="mt-8 animate-fade-in">
-          <p className="text-sm text-gray-500 mb-3">Here's what I created based on your request...</p>
-          <GeneratedWorkflow />
-        </div>
-      )}
-
-      {/* Data Visualization */}
-      {showChart && (
-        <div className="mt-8 animate-fade-in">
-          <p className="text-sm text-gray-500 mb-3">Here's what I created based on your request...</p>
-          <DataVisualization />
-        </div>
-      )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-gray-900">
-              <Clock className="w-5 h-5" />
-              Recent Pages
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {recentPages.map((page, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
-                >
-                  <page.icon className="w-4 h-4 text-gray-500" />
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-900">{page.name}</p>
-                    <p className="text-sm text-gray-500">
-                      {page.type} • {page.updated}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-gray-900">
-              <Sparkles className="w-5 h-5" />
-              AI Suggestions
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+          <div className="space-y-6">
             <div className="space-y-4">
-              <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200">
-                <h4 className="font-medium text-gray-900 mb-2">Create a Project Timeline</h4>
-                <p className="text-sm text-gray-600 mb-3">
-                  Based on your recent activity, you might want to create a timeline for your Q1 planning.
-                </p>
-                <Button size="sm" variant="outline" onClick={() => onViewChange("table")}>
-                  Create Timeline
+              <Textarea
+                placeholder={
+                  currentAction === 'workflow' ? 'e.g., Create a workflow for launching a new product...' :
+                  currentAction === 'table' ? 'e.g., Create a table for project tasks with columns for task, assignee, status, and deadline...' :
+                  currentAction === 'query' ? 'Ask anything...' :
+                  'e.g., Create a blog post about artificial intelligence...'
+                }
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                className="min-h-[120px]"
+              />
+              
+              <div className="flex justify-end space-x-3">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIsDialogOpen(false);
+                    setInputValue('');
+                    setGeneratedContent(null);
+                  }}
+                >
+                  Cancel
                 </Button>
-              </div>
-
-              <div className="p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border border-green-200">
-                <h4 className="font-medium text-gray-900 mb-2">Team Meeting Template</h4>
-                <p className="text-sm text-gray-600 mb-3">
-                  Generate a structured meeting agenda template for your team.
-                </p>
-                <Button size="sm" variant="outline" onClick={() => onViewChange("page")}>
-                  Generate Template
-                </Button>
-                <Button size="sm" variant="outline" onClick={handleVisualizeData}>
-                  Visualize Data
+                <Button
+                  onClick={handleGenerate}
+                  disabled={isLoading || !inputValue.trim()}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                >
+                  {isLoading ? (
+                    <InlineLoadingSpinner message="Generating..." />
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Generate
+                    </>
+                  )}
                 </Button>
               </div>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+
+            {/* Loading State */}
+            {isLoading && (
+              <div className="py-8">
+                <LoadingSpinner type="ai-thinking" />
+              </div>
+            )}
+
+            {/* Generated Content */}
+            {!isLoading && generatedContent && (
+              <div className="border-t pt-6">
+                {renderGeneratedContent()}
+              </div>
+            )}
+
+            {/* Error State */}
+            {error && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-700 text-sm">{error}</p>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
-  )
+  );
 }
 
-const GeneratedTable = () => {
+// Inline loading component for buttons
+function InlineLoadingSpinner({ message }: { message?: string }) {
   return (
-    <div>
-      <h2>Generated Table</h2>
-      <p>This is a placeholder for the generated table component.</p>
+    <div className="flex items-center space-x-2">
+      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      <span>{message || 'Loading...'}</span>
     </div>
-  )
-}
-
-const GeneratedWorkflow = () => {
-  return (
-    <div>
-      <h2>Generated Workflow</h2>
-      <p>This is a placeholder for the generated workflow component.</p>
-    </div>
-  )
-}
-
-const DataVisualization = () => {
-  return (
-    <div>
-      <h2>Data Visualization</h2>
-      <p>This is a placeholder for the data visualization component.</p>
-    </div>
-  )
+  );
 }
