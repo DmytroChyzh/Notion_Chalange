@@ -120,7 +120,7 @@ export function WelcomeScreen({ onGetStarted }: WelcomeScreenProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-6">
-      <Card className="w-full max-w-6xl shadow-2xl border-0">
+      <Card className="w-full shadow-2xl border-0">
         <CardHeader className="text-center pb-10">
           <div className="flex items-center justify-center space-x-3 mb-6">
             <Badge variant="secondary" className="text-base px-4 py-2">

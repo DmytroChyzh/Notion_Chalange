@@ -183,7 +183,7 @@ export function AIDashboard({ onViewChange }: AIDashboardProps) {
   ];
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="p-8 w-full">
       <div className="mb-6 flex justify-end">
         <Button
           variant="outline"
