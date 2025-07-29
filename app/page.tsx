@@ -9,10 +9,15 @@ import { AIChatPanel } from '@/components/ai-chat-panel';
 import { AITableGenerator } from '@/components/ai-table-generator';
 import { AIPageBuilder } from '@/components/ai-page-builder';
 import { AIWorkflowBuilder } from '@/components/ai-workflow-builder';
+import { ProjectRoadmap } from '@/components/project-roadmap';
+import { ContentCalendar } from '@/components/content-calendar';
+import { TeamWorkflow } from '@/components/team-workflow';
+import { MeetingNotes } from '@/components/meeting-notes';
+import { GettingStarted } from '@/components/getting-started';
 import { WelcomeScreen } from '@/components/welcome-screen';
 import { Toaster } from '@/components/ui/toaster';
 
-export type ViewType = "dashboard" | "table" | "page" | "workflow";
+export type ViewType = "dashboard" | "table" | "page" | "workflow" | "project-roadmap" | "content-calendar" | "team-workflow" | "meeting-notes" | "getting-started";
 
 export default function NotionAI() {
   const [currentView, setCurrentView] = useState<ViewType>("dashboard");
@@ -40,6 +45,16 @@ export default function NotionAI() {
         return <AIPageBuilder />;
       case "workflow":
         return <AIWorkflowBuilder />;
+      case "project-roadmap":
+        return <ProjectRoadmap />;
+      case "content-calendar":
+        return <ContentCalendar />;
+      case "team-workflow":
+        return <TeamWorkflow />;
+      case "meeting-notes":
+        return <MeetingNotes />;
+      case "getting-started":
+        return <GettingStarted />;
       default:
         return <AIDashboard onViewChange={setCurrentView} />;
     }
@@ -54,7 +69,7 @@ export default function NotionAI() {
           <TopNavigation onChatToggle={() => setIsChatOpen(!isChatOpen)} />
 
           <div className="flex-1 flex overflow-hidden">
-            <main className={`flex-1 overflow-auto transition-all duration-300 ${isChatOpen ? "mr-96" : "mr-0"}`}>
+                            <main className={`flex-1 overflow-auto transition-all duration-300 ${isChatOpen ? "mr-[420px]" : "mr-0"}`}>
               {renderMainContent()}
             </main>
 

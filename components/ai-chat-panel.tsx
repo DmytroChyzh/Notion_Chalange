@@ -118,7 +118,7 @@ export function AIChatPanel({ isOpen, onClose, onViewChange }: AIChatPanelProps)
   if (!isOpen) return null
 
   return (
-    <div className="fixed right-0 top-12 bottom-0 w-96 bg-white border-l border-gray-200 flex flex-col z-10">
+    <div className="fixed right-0 top-12 bottom-0 w-[420px] bg-white border-l border-gray-200 flex flex-col z-10">
       <div className="p-4 border-b border-gray-200 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Bot className="w-5 h-5 text-blue-600" />
@@ -141,7 +141,7 @@ export function AIChatPanel({ isOpen, onClose, onViewChange }: AIChatPanelProps)
                 </Avatar>
               )}
 
-              <div className={`max-w-[320px] ${message.type === "user" ? "order-first" : ""}`}>
+                              <div className={`max-w-[360px] ${message.type === "user" ? "order-first" : ""}`}>
                 <div
                   className={`p-3 rounded-lg ${
                     message.type === "user" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-900"

@@ -14,7 +14,7 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
-import { Home, FileText, Table, Workflow, Plus, Settings, Trash2 } from "lucide-react"
+import { Home, FileText, Table, Workflow, Plus, Settings, Trash2, Calendar, Users, BookOpen } from "lucide-react"
 import type { ViewType } from "@/app/page"
 
 interface AppSidebarProps {
@@ -24,11 +24,11 @@ interface AppSidebarProps {
 
 export function AppSidebar({ onViewChange, currentView }: AppSidebarProps) {
   const [pages] = useState([
-    { id: 1, name: "Getting Started", icon: FileText, type: "page" as ViewType },
-    { id: 2, name: "Project Roadmap", icon: Table, type: "table" as ViewType },
-    { id: 3, name: "Content Calendar", icon: Table, type: "table" as ViewType },
-    { id: 4, name: "Team Workflow", icon: Workflow, type: "workflow" as ViewType },
-    { id: 5, name: "Meeting Notes", icon: FileText, type: "page" as ViewType },
+    { id: 1, name: "Getting Started", icon: BookOpen, type: "getting-started" as ViewType },
+    { id: 2, name: "Project Roadmap", icon: Table, type: "project-roadmap" as ViewType },
+    { id: 3, name: "Content Calendar", icon: Calendar, type: "content-calendar" as ViewType },
+    { id: 4, name: "Team Workflow", icon: Users, type: "team-workflow" as ViewType },
+    { id: 5, name: "Meeting Notes", icon: FileText, type: "meeting-notes" as ViewType },
   ])
 
   return (
@@ -44,7 +44,7 @@ export function AppSidebar({ onViewChange, currentView }: AppSidebarProps) {
         <Button
           variant="ghost"
           className="w-full justify-start text-gray-600 hover:bg-gray-100"
-          onClick={() => onViewChange("dashboard")}
+          onClick={() => onViewChange("page")}
         >
           <Plus className="w-4 h-4 mr-2" />
           New Page

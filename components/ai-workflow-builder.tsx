@@ -127,7 +127,7 @@ export function AIWorkflowBuilder() {
   }
 
   return (
-    <div className="p-8 w-full">
+    <div className="p-8 w-full max-w-none">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Product Development Workflow</h1>
