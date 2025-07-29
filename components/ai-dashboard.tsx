@@ -239,43 +239,43 @@ export function AIDashboard({ onNavigate }: DashboardProps) {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="w-full max-w-none space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">AI Dashboard</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-4xl font-bold">AI Dashboard</h1>
+          <p className="text-lg text-muted-foreground mt-2">
             Your intelligent workspace powered by GPT-4
           </p>
         </div>
-        <Badge variant="secondary" className="flex items-center space-x-1">
-          <Zap className="w-3 h-3" />
+        <Badge variant="secondary" className="flex items-center space-x-1 text-base px-4 py-2">
+          <Zap className="w-4 h-4" />
           <span>AI Powered</span>
         </Badge>
       </div>
 
       {/* Main Actions Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {actionCards.map((card) => (
           <Card 
             key={card.action}
-            className="group cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 border-2 hover:border-primary/50"
+            className="group cursor-pointer transition-all duration-200 hover:shadow-xl hover:scale-105 border-2 hover:border-primary/50 h-full"
             onClick={() => handleAction(card.action)}
           >
-            <CardContent className="p-6">
+            <CardContent className="p-8 h-full flex flex-col justify-center">
               <div className="flex items-center space-x-4">
-                <div className={`p-3 rounded-lg ${card.color} text-white`}>
-                  <card.icon className="w-6 h-6" />
+                <div className={`p-4 rounded-xl ${card.color} text-white shadow-lg`}>
+                  <card.icon className="w-8 h-8" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold group-hover:text-primary transition-colors">
+                  <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
                     {card.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <p className="text-sm text-muted-foreground mt-2">
                     {card.description}
                   </p>
                 </div>
-                <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
               </div>
             </CardContent>
           </Card>
@@ -284,10 +284,10 @@ export function AIDashboard({ onNavigate }: DashboardProps) {
 
       {/* AI Generation Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center space-x-2">
-              <Sparkles className="w-5 h-5 text-blue-500" />
+            <DialogTitle className="flex items-center space-x-2 text-xl">
+              <Sparkles className="w-6 h-6 text-blue-500" />
               <span>
                 {currentAction === 'workflow' && 'Plan Workflow'}
                 {currentAction === 'table' && 'Generate Table'}
@@ -295,7 +295,7 @@ export function AIDashboard({ onNavigate }: DashboardProps) {
                 {currentAction === 'page' && 'Create Page'}
               </span>
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-base">
               {currentAction === 'workflow' && 'Describe the workflow you want to create'}
               {currentAction === 'table' && 'Describe the table structure and data you need'}
               {currentAction === 'query' && 'Ask any question to our AI assistant'}
@@ -314,12 +314,13 @@ export function AIDashboard({ onNavigate }: DashboardProps) {
                 }
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                className="min-h-[120px]"
+                className="min-h-[150px] text-base"
               />
               
               <div className="flex justify-end space-x-3">
                 <Button
                   variant="outline"
+                  size="lg"
                   onClick={() => {
                     setIsDialogOpen(false);
                     setInputValue('');
@@ -329,6 +330,7 @@ export function AIDashboard({ onNavigate }: DashboardProps) {
                   Cancel
                 </Button>
                 <Button
+                  size="lg"
                   onClick={handleGenerate}
                   disabled={isLoading || !inputValue.trim()}
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
@@ -337,7 +339,7 @@ export function AIDashboard({ onNavigate }: DashboardProps) {
                     <InlineLoadingSpinner message="Generating..." />
                   ) : (
                     <>
-                      <Sparkles className="w-4 h-4 mr-2" />
+                      <Sparkles className="w-5 h-5 mr-2" />
                       Generate
                     </>
                   )}
@@ -347,22 +349,22 @@ export function AIDashboard({ onNavigate }: DashboardProps) {
 
             {/* Loading State */}
             {isLoading && (
-              <div className="py-8">
+              <div className="py-12">
                 <LoadingSpinner type="ai-thinking" />
               </div>
             )}
 
             {/* Generated Content */}
             {!isLoading && generatedContent && (
-              <div className="border-t pt-6">
+              <div className="border-t pt-8">
                 {renderGeneratedContent()}
               </div>
             )}
 
             {/* Error State */}
             {error && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-red-700 text-sm">{error}</p>
+              <div className="p-6 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-700 text-base">{error}</p>
               </div>
             )}
           </div>
@@ -376,8 +378,8 @@ export function AIDashboard({ onNavigate }: DashboardProps) {
 function InlineLoadingSpinner({ message }: { message?: string }) {
   return (
     <div className="flex items-center space-x-2">
-      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-      <span>{message || 'Loading...'}</span>
+      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+      <span className="text-base">{message || 'Loading...'}</span>
     </div>
   );
 }
